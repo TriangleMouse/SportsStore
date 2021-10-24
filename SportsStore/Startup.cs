@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using SportsStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.AspNetCore.Identity;
 namespace SportsStore
 {
     public class Startup
@@ -23,7 +23,10 @@ namespace SportsStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SportStoreProducts:DefaultConnection")));
+
+            services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SportStoreIdentity:DefaultConnection")));
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 
             services.AddTransient<IProductRepository,EFProductRepository> ();
             services.AddTransient<IOrderRepository, EFOrderRepository>();
@@ -40,9 +43,13 @@ namespace SportsStore
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
 
+            
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
             /*app.UseMvc(routes=>
             {
                 routes.MapRoute(
@@ -76,6 +83,7 @@ namespace SportsStore
                 });
 
             SeedData.EnsurePopulated(app);
+            IdentitySeedData.EnsurePopulated(app);
         }
     }
 }

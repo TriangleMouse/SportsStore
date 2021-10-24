@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,24 @@ namespace SportsStore.Controllers
         {
             this.repository = repo;
             this.cart = cartService;
+        }
+
+        [Authorize]
+        public ActionResult List() =>
+            View(repository.Orders.Where(o=>!o.Shipped));
+
+        
+        [HttpPost]
+        [Authorize]
+        public IActionResult MarkShipped(int orderID)
+        {
+            Order order = repository.Orders.FirstOrDefault(o=>o.OrderID==orderID);
+            if (order != null)
+            {
+                order.Shipped = true;
+                repository.SaveOrder(order);
+            }
+            return RedirectToAction(nameof(List));
         }
 
         public ActionResult Checkout() => View(new Order());

@@ -1,5 +1,10 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=SportsStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "SportStoreProducts": {
+      "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=SportsStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+    },
+    "SportStoreIdentity": {
+      "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=SportStoreIdentity;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
   }
 }
